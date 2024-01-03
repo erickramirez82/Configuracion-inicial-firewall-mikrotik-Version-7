@@ -86,9 +86,10 @@ add action=accept chain=input comment="UDP Trafico DNS" dst-port=53 protocol=udp
 add chain=input action=drop comment="Denegar todo desde Internet"
 ```
 
+Agregamos la red local para clientes tenga navegacion 
 ```
 /ip firewall address-list
-add address=192.168.2.123 comment="Redes_Lan" list=Redes_Lan
+add address=192.168.88.0/24 comment="Redes_Lan" list=Redes_Lan
 ```
 
 
