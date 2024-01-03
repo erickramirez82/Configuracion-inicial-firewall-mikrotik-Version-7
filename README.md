@@ -63,7 +63,7 @@ add name=dhcp ranges=192.168.88.10-192.168.88.50
 /ip dhcp-server
 add address-pool=dhcp interface=bridge lease-time=10m name=defconf
 /ip dhcp-server network
-add address=192.168.88.0/24 comment=defconf dns-server=192.168.88.1 gateway=192.168.88.1
+add address=192.168.88.0/24 comment=defconf dns-server=192.168.88.1 gateway=192.168.88.1 netmask=24
 ```
 
 
