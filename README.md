@@ -5,6 +5,13 @@
 /interface ethernet
   set [ find default-name=ether1 ] name=ether1-wan comment="IPS1"
  ```
+
+- Definimos ip address la ip de la wan
+```
+/ip address
+add address=192.168.1.19/24 comment=defconf interface=ether1-wan network=192.168.1.0
+```
+ 
 - Configuramos en firewall dentro del NAT 
 
 ```
@@ -35,7 +42,8 @@ add comment=defconf interface=bridge list=LAN
 add comment=defconf interface=ether1-wan list=WAN
 ```
 
-- Defini en ip address segmento de ip con que va trabajar la LAN
+
+- Definir en ip address la ip Router
 
 ```
 /ip address
