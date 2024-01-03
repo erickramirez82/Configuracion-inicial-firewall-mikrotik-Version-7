@@ -81,8 +81,17 @@ set api-ssl disabled=yes
 add action=drop chain=input comment="Denegar Conexiones Invalidas" connection-state=invalid
 add action=accept chain=input comment="Permitir Conexiones establecidas y relacionadas" connection-state=established,related
 add action=accept chain=input protocol=icmp comment="accept ICMP packets"
+add action=accept chain=input comment="TCP Trafico DNS" dst-port=53 protocol=tcp src-address-list=Redes_Lan
+add action=accept chain=input comment="UDP Trafico DNS" dst-port=53 protocol=udp src-address-list=Redes_Lan
 add chain=input action=drop comment="Denegar todo desde Internet"
 ```
+
+```
+/ip firewall address-list
+add address=192.168.2.123 comment="Redes_Lan" list=Redes_Lan
+```
+
+
 
 Para agregar mas reglas de seguridad ir al siguiente repositio https://github.com/erickramirez82/bloqueo-botnets-en-mikrotik
 
