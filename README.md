@@ -12,7 +12,6 @@
 add address=192.168.1.19/24 comment=defconf interface=ether1-wan network=192.168.1.0
 ```
  
-
 - Definirmos bridge en caso usarlo
 
 ```
@@ -59,6 +58,42 @@ add address-pool=dhcp interface=bridge lease-time=10m name=defconf
 /ip dhcp-server network
 add address=192.168.88.0/24 comment=defconf dns-server=192.168.88.1 gateway=192.168.88.1 netmask=24
 ```
+### Seguridad y Firewall
+
+- Desactivamos servicios no vamos a usar y sugerencia cambiar el puerto winbox y www que vienen por default
+
+```
+/ip service
+set telnet disabled=yes
+set ftp disabled=yes
+set www port=80
+set ssh port=22 disabled=yes
+set api disabled=yes
+set winbox port=8291
+set api-ssl disabled=yes
+```
+
+- Reglas de firewall básicas protección INPUT en mikrotik configuración inicial
+
+```
+/ip settings set tcp-syncookies=yes
+/ip firewall filter
+add action=drop chain=input comment="Denegar Conexiones Invalidas" connection-state=invalid
+add action=accept chain=input comment="Permitir Conexiones establecidas y relacionadas" connection-state=established,related
+
+add chain=input action=drop comment="Denegar todo desde Internet"
+```
+
+Para agregar mas reglas de seguridad ir al siguiente repositio https://github.com/erickramirez82/bloqueo-botnets-en-mikrotik
+
+### Activamos navegacion a internet al equipo
+
+- Definimos lo Dns de navegacion
+
+```
+/ip dns
+set allow-remote-requests=yes servers=1.1.1.1,8.8.8.8
+```
 
 - Configuramos en firewall dentro del NAT
 - 
@@ -92,29 +127,4 @@ check dns
 add check-gateway=ping dst-address=200.21.200.10 gateway=192.168.1.1  scope=10   comment="Monitor DNS IPS1"
 ```
 
-- Reglas de firewall básicas protección INPUT en mikrotik configuración inicial
 
-```
-/ip settings set tcp-syncookies=yes
-/ip firewall filter
-/ip firewall filter
-add chain=input action=accept protocol=icmp comment="Permitir ICMP"
-add chain=input action=accept connection-state=established,related comment="Permitir conexiones establecidas y relacionadas"
-add chain=input action=drop in-interface=WAN comment="Bloquear todo otro tráfico de entrada"
-add chain=forward action=accept connection-state=established,related comment="Permitir conexiones establecidas y relacionadas"
-add chain=forward action=drop connection-state=invalid comment="Descartar conexiones inválidas"
-
-
-
-
-add action=drop chain=input comment="IN - R - Conexiones invalidas" connection-state=invalid
-add action=accept chain=input comment="IN - P - Acceso a src-address-list \"Soporte\"" src-address-list=Soporte
-add action=drop chain=input comment="IN - R - Detecta y rechaza escaneadores de puertos" protocol=tcp psd=10,3s,3,1 in-interface=WAN1
-add action=drop chain=input comment="IN - R - Rechaza escaneadores de puertos" src-address-list=EscaneadoresPuertos in-interface=WAN1
-add action=add-src-to-address-list address-list=EscaneadoresPuertos address-list-timeout=none-static chain=input comment="IN - R - Detecta y lista escaneadores de puertos" protocol=tcp psd=10,3s,3,1 in-interface=WAN1
-add action=tarpit chain=input comment="IN - R - Suprime ataques DoS" connection-limit=3,32 protocol=tcp src-address-list=AtaqueDoS in-interface=WAN1
-add action=add-src-to-address-list address-list=AtaqueDoS address-list-timeout=2w1d chain=input comment="IN - R - Detecta ataques DoS" connection-limit=10,32 protocol=tcp in-interface=WAN1
-add action=accept chain=input comment="IN - P - TCP Trafico DNS" dst-port=53 protocol=tcp src-address-list=Redes_Lan
-add action=accept chain=input comment="IN - P - UDP Trafico DNS" dst-port=53 protocol=udp src-address-list=Redes_Lan
-add action=drop chain=input comment="IN - R - Todo lo demas"
-```
