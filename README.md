@@ -12,12 +12,6 @@
 add address=192.168.1.19/24 comment=defconf interface=ether1-wan network=192.168.1.0
 ```
  
-- Configuramos en firewall dentro del NAT 
-
-```
-/ip firewall nat
-add chain=srcnat out-interface=ether1-wan action=masquerade
-```
 
 - Definirmos bridge en caso usarlo
 
@@ -66,7 +60,37 @@ add address-pool=dhcp interface=bridge lease-time=10m name=defconf
 add address=192.168.88.0/24 comment=defconf dns-server=192.168.88.1 gateway=192.168.88.1 netmask=24
 ```
 
+- Configuramos en firewall dentro del NAT
+- 
+```
+/ip firewall nat
+add chain=srcnat out-interface=ether1-wan action=masquerade
+```
 
+- Definimos las rutas Ip->Route
+
+1. Monitor al Dns del  operador claro:190.157.8.33, movistar:200.21.200.10, etb:200.75.51.132) 
+
+- Definir las salidas dos maneras 
+
+Usando la puerta enlace del modem
+```
+/ip/route/
+add distance=1 gateway=192.168.1.1  check-gateway=ping  comment="Default IPS1 out"
+```
+o con los DNS del operador
+
+```
+/ip/route/
+add distance=1 gateway=200.21.200.10 target-scope=11 check-gateway=ping  comment="Default DNS IPS1 out"
+```
+
+check dns 
+
+```
+/ip/route/
+add check-gateway=ping dst-address=200.21.200.10 gateway=192.168.1.1  scope=10   comment="Monitor DNS IPS1"
+```
 
 - Reglas de firewall básicas protección INPUT en mikrotik configuración inicial
 
