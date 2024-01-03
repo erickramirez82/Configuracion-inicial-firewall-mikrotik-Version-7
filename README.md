@@ -25,6 +25,16 @@ add bridge=bridge interface=ether2
 add bridge=bridge interface=ether3
 ```
 
+- Definimos la lista de interfaces
+```
+/interface list
+add comment=defconf name=WAN
+add comment=defconf name=LAN
+/interface list member
+add comment=defconf interface=bridge list=LAN
+add comment=defconf interface=ether1-wan list=WAN
+```
+
 - Defini en ip address segmento de ip con que va trabajar la LAN
 
 ```
@@ -47,6 +57,8 @@ add address-pool=dhcp interface=bridge lease-time=10m name=defconf
 /ip dhcp-server network
 add address=192.168.88.0/24 comment=defconf dns-server=192.168.88.1 gateway=192.168.88.1
 ```
+
+
 
 - Reglas de firewall básicas protección INPUT en mikrotik configuración inicial
 
