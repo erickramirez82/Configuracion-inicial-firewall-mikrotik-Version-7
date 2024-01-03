@@ -80,7 +80,7 @@ set api-ssl disabled=yes
 /ip firewall filter
 add action=drop chain=input comment="Denegar Conexiones Invalidas" connection-state=invalid
 add action=accept chain=input comment="Permitir Conexiones establecidas y relacionadas" connection-state=established,related
-
+add action=accept chain=input protocol=icmp comment="accept ICMP packets"
 add chain=input action=drop comment="Denegar todo desde Internet"
 ```
 
