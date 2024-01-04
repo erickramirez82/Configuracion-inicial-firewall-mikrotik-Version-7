@@ -142,4 +142,4 @@ check dns
 add check-gateway=ping dst-address=200.21.200.10 gateway=192.168.1.1  scope=10   comment="Monitor DNS IPS1"
 ```
 
-
+Si tienes problemas de latencias puedes usar link https://github.com/erickramirez82/Mikrotik-Bandwidth-Management-CAKE-in-Queue-Tree
