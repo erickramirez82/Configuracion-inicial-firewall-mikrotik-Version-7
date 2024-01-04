@@ -85,6 +85,9 @@ add action=accept chain=input comment="Acceso winbox y web Soporte" dst-port=80,
 add action=accept chain=input comment="TCP Trafico DNS" dst-port=53 protocol=tcp src-address-list=Redes_Lan
 add action=accept chain=input comment="UDP Trafico DNS" dst-port=53 protocol=udp src-address-list=Redes_Lan
 add chain=input action=drop comment="Denegar todo desde Internet"
+add action=accept chain=forward comment="defconf: accept established,related, untracked" connection-state=established,related,untracked
+add action=drop chain=forward comment="defconf: drop invalid" connection-state=invalid
+add action=drop chain=forward comment="defconf: drop all from WAN not DSTNATed" connection-nat-state=!dstnat connection-state=new in-interface-list=WAN
 ```
 
 Agregamos la red local para clientes tenga navegacion 
