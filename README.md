@@ -79,7 +79,7 @@ set api-ssl disabled=yes
 /ip settings set tcp-syncookies=yes
 /ip firewall filter
 add action=drop chain=input comment="Denegar Conexiones Invalidas" connection-state=invalid
-add action=accept chain=input comment="Permitir Conexiones establecidas y relacionadas" connection-state=established,related
+add action=accept chain=input comment="Permitir Conexiones establecidas y relacionadas" connection-state=established,related,untracked
 add action=accept chain=input protocol=icmp comment="accept ICMP packets"
 add action=accept chain=input comment="Acceso winbox y web Soporte" dst-port=80,8291 protocol=tcp src-address-list=Soporte
 add action=accept chain=input comment="TCP Trafico DNS" dst-port=53 protocol=tcp src-address-list=Redes_Lan
